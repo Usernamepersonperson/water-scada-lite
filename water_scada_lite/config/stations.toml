@@ -1,0 +1,53 @@
+# water-scada-lite demo configuration. Thresholds are generic defaults, not tuned per station.
+[qa]
+latency_min = 30        # portal publishes with a delay; samples newer than (fetch time - latency) are not "expected"
+stuck_samples = 24      # flat for >= 2 h at 5 min sampling
+spike_k = 8.0
+
+[alarms]
+rise_pct_per_h = 25.0   # rate-of-rise alarm on discharge (percent per hour, 60 min window)
+rise_window_min = 60
+elevated_factor = 3.0   # discharge >= factor x baseline median
+baseline_hours = 48     # baseline = median of the first N clean hours of the snapshot
+hysteresis = 0.05       # clear at 95 % of a high threshold
+min_samples = 2         # debounce
+
+[forecast]
+horizons_min = [60, 180]
+train_frac = 0.6
+
+# 10 FOEN/BAFU stations (ids as on hydrodaten.admin.ch).
+[[stations]]
+id = "2135"   # Aare - Bern, Schoenau
+
+[[stations]]
+id = "2009"   # Rhone - Porte du Scex
+
+[[stations]]
+id = "2473"   # Rhein - Diepoldsau, Rietbruecke
+
+[[stations]]
+id = "2152"   # Reuss - Luzern, Geissmattbruecke
+
+[[stations]]
+id = "2243"   # Limmat - Baden, Limmatpromenade
+
+[[stations]]
+id = "2030"   # Aare - Thun
+
+# Hypothetical small-hydro intakes (values are assumptions for the demo, not real concessions).
+[[stations]]
+id = "2200"   # Weisse Luetschine - Zweiluetschinen
+intake = { min_flow_m3s = 1.9, capacity_m3s = 0.2 }
+
+[[stations]]
+id = "2327"   # Dischmabach - Davos, Kriegsmatte
+intake = { min_flow_m3s = 0.55, capacity_m3s = 0.1 }
+
+[[stations]]
+id = "2084"   # Muota - Ingenbohl
+intake = { min_flow_m3s = 2.5, capacity_m3s = 1.0 }
+
+[[stations]]
+id = "2070"   # Emme - Emmenmatt
+intake = { min_flow_m3s = 0.4, capacity_m3s = 0.1 }

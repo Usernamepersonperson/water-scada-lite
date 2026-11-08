@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "water-scada-lite"
+version = "0.1.0"
+description = "Lightweight monitoring and alarm system for water utilities and small hydropower, on open FOEN/BAFU hydrology data."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = ["numpy>=1.26", "pandas>=2.2", "httpx>=0.27", "fastapi>=0.110", "uvicorn>=0.29", "matplotlib>=3.8", "paho-mqtt>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+water-scada = "water_scada_lite.cli:main"
+
+[tool.setuptools]
+packages = ["water_scada_lite"]
+
+[tool.setuptools.package-data]
+water_scada_lite = ["web/*", "config/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:asyncio"
+
+[tool.ruff]
+line-length = 125
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]

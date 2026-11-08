@@ -1,0 +1,262 @@
+{
+ "2135": {
+  "name": "Aare - Bern, Schönau",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 360.0,
+    "upper": 430.0
+   },
+   {
+    "level": 3,
+    "lower": 430.0,
+    "upper": 500.0
+   },
+   {
+    "level": 4,
+    "lower": 500.0,
+    "upper": 560.0
+   },
+   {
+    "level": 5,
+    "lower": 560.0,
+    "upper": 1120.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:43+00:00"
+ },
+ "2009": {
+  "name": "Rhône - Porte du Scex",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 700.0,
+    "upper": 1000.0
+   },
+   {
+    "level": 3,
+    "lower": 1000.0,
+    "upper": 1200.0
+   },
+   {
+    "level": 4,
+    "lower": 1200.0,
+    "upper": 1400.0
+   },
+   {
+    "level": 5,
+    "lower": 1400.0,
+    "upper": 2800.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:45+00:00"
+ },
+ "2473": {
+  "name": "Rhein - Diepoldsau, Rietbrücke",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 1300.0,
+    "upper": 1950.0
+   },
+   {
+    "level": 3,
+    "lower": 1950.0,
+    "upper": 2450.0
+   },
+   {
+    "level": 4,
+    "lower": 2450.0,
+    "upper": 3050.0
+   },
+   {
+    "level": 5,
+    "lower": 3050.0,
+    "upper": 6100.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:46+00:00"
+ },
+ "2152": {
+  "name": "Reuss - Luzern, Geissmattbrücke",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 280.0,
+    "upper": 350.0
+   },
+   {
+    "level": 3,
+    "lower": 350.0,
+    "upper": 390.0
+   },
+   {
+    "level": 4,
+    "lower": 390.0,
+    "upper": 430.0
+   },
+   {
+    "level": 5,
+    "lower": 430.0,
+    "upper": 860.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:48+00:00"
+ },
+ "2243": {
+  "name": "Limmat - Baden, Limmatpromenade",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 350.0,
+    "upper": 480.0
+   },
+   {
+    "level": 3,
+    "lower": 480.0,
+    "upper": 550.0
+   },
+   {
+    "level": 4,
+    "lower": 550.0,
+    "upper": 630.0
+   },
+   {
+    "level": 5,
+    "lower": 630.0,
+    "upper": 1260.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:50+00:00"
+ },
+ "2030": {
+  "name": "Aare - Thun",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 350.0,
+    "upper": 400.0
+   },
+   {
+    "level": 3,
+    "lower": 400.0,
+    "upper": 430.0
+   },
+   {
+    "level": 4,
+    "lower": 430.0,
+    "upper": 490.0
+   },
+   {
+    "level": 5,
+    "lower": 490.0,
+    "upper": 980.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:52+00:00"
+ },
+ "2200": {
+  "name": "Weisse Lütschine - Zweilütschinen",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 60.0,
+    "upper": 85.0
+   },
+   {
+    "level": 3,
+    "lower": 85.0,
+    "upper": 100.0
+   },
+   {
+    "level": 4,
+    "lower": 100.0,
+    "upper": 120.0
+   },
+   {
+    "level": 5,
+    "lower": 120.0,
+    "upper": 240.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:53+00:00"
+ },
+ "2327": {
+  "name": "Dischmabach - Davos, Kriegsmatte",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 10.0,
+    "upper": 15.0
+   },
+   {
+    "level": 3,
+    "lower": 15.0,
+    "upper": 18.0
+   },
+   {
+    "level": 4,
+    "lower": 18.0,
+    "upper": 20.0
+   },
+   {
+    "level": 5,
+    "lower": 20.0,
+    "upper": 40.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:55+00:00"
+ },
+ "2084": {
+  "name": "Muota - Ingenbohl",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 170.0,
+    "upper": 240.0
+   },
+   {
+    "level": 3,
+    "lower": 240.0,
+    "upper": 300.0
+   },
+   {
+    "level": 4,
+    "lower": 300.0,
+    "upper": 360.0
+   },
+   {
+    "level": 5,
+    "lower": 360.0,
+    "upper": 720.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:57+00:00"
+ },
+ "2070": {
+  "name": "Emme - Emmenmatt, nur Hauptstation",
+  "bands": [
+   {
+    "level": 2,
+    "lower": 190.0,
+    "upper": 330.0
+   },
+   {
+    "level": 3,
+    "lower": 330.0,
+    "upper": 440.0
+   },
+   {
+    "level": 4,
+    "lower": 440.0,
+    "upper": 560.0
+   },
+   {
+    "level": 5,
+    "lower": 560.0,
+    "upper": 1120.0
+   }
+  ],
+  "fetched_at": "2026-11-08T19:51:58+00:00"
+ }
+}

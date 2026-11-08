@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>water-scada-lite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { margin: 0; font: 14px "Segoe UI", system-ui, sans-serif; background: #16213A; color: #F8FAFC; }
+  header { padding: 12px 20px; border-bottom: 1px solid #2A3750; }
+  header h1 { margin: 0; font-size: 19px; }
+  header small { color: #A9B6CB; }
+  main { display: grid; grid-template-columns: 300px 1fr; gap: 16px; padding: 16px 20px; }
+  #stations { list-style: none; margin: 0; padding: 0; }
+  #stations li { padding: 8px 10px; border: 1px solid #2A3750; margin-bottom: 6px; border-radius: 6px; cursor: pointer; }
+  #stations li.sel { border-color: #38BDF8; }
+  #stations .meta { color: #A9B6CB; font-size: 12px; }
+  .badge { float: right; background: #F87171; color: #16213A; border-radius: 10px; padding: 0 7px; font-weight: 600; }
+  canvas { width: 100%; height: 360px; background: #16213A; border: 1px solid #2A3750; border-radius: 6px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid #2A3750; font-size: 13px; }
+  th { color: #A9B6CB; font-weight: 600; }
+  button { background: #38BDF8; border: 0; border-radius: 4px; padding: 3px 10px; cursor: pointer; font-weight: 600; }
+  .st-active_unack { color: #F87171; } .st-cleared_unack { color: #FBBF24; } .st-active_ack, .st-cleared { color: #34D399; }
+</style>
+</head>
+<body>
+<header><h1>water-scada-lite</h1><small>Source: FOEN/BAFU hydrology (open data). Not an official warning service.</small></header>
+<main>
+  <ul id="stations"></ul>
+  <section>
+    <h2 id="title" style="font-size:16px;margin:0 0 8px"></h2>
+    <canvas id="chart" width="1100" height="360"></canvas>
+    <table id="alarms"><thead><tr><th>#</th><th>Rule</th><th>Severity</th><th>Raised (UTC)</th><th>Peak</th><th>State</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+<script>
+const C = { grid: "#2A3750", text: "#F8FAFC", muted: "#A9B6CB", accent: "#38BDF8", amber: "#FBBF24", red: "#F87171", violet: "#A78BFA", grey: "#64748B" };
+let cur = null;
+
+async function j(url, opt) { const r = await fetch(url, opt); if (!r.ok) throw new Error(url + " " + r.status); return r.json(); }
+
+async function loadStations() {
+  const list = await j("/api/stations");
+  const ul = document.getElementById("stations"); ul.innerHTML = "";
+  for (const s of list) {
+    const li = document.createElement("li");
+    if (s.id === cur) li.className = "sel";
+    li.innerHTML = `${s.open_alarms ? `<span class="badge">${s.open_alarms}</span>` : ""}<b>${s.name}</b>
+      <div class="meta">${s.id} &middot; Q ${s.discharge_m3s == null ? "n/a" : s.discharge_m3s.toFixed(2)} m3/s &middot; ${s.completeness_pct}% complete</div>`;
+    li.onclick = () => select(s.id);
+    ul.appendChild(li);
+  }
+  if (!cur && list.length) select(list[0].id);
+}
+
+async function select(id) {
+  cur = id;
+  const d = await j(`/api/stations/${id}/series`);
+  document.getElementById("title").textContent = `${d.name} (${id}) - discharge, m3/s`;
+  draw(d); table(d.alarms);
+  for (const li of document.querySelectorAll("#stations li")) li.classList.toggle("sel", li.textContent.includes(id));
+}
+
+function draw(d) {
+  const cv = document.getElementById("chart"), g = cv.getContext("2d"), W = cv.width, H = cv.height, L = 50, R = 12, T = 12, B = 24;
+  g.clearRect(0, 0, W, H);
+  const ts = d.t.map(x => Date.parse(x)), t0 = ts[0], t1 = ts[ts.length - 1];
+  const vals = d.q.filter(v => v !== null);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const lines = [];
+  for (const [k, v] of Object.entries(d.thresholds)) if (v < hi * 1.6) { lines.push([k, v, C.amber]); hi = Math.max(hi, v); }
+  if (d.min_flow !== null) { lines.push(["min flow", d.min_flow, C.violet]); lo = Math.min(lo, d.min_flow); hi = Math.max(hi, d.min_flow); }
+  const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  const X = t => L + (t - t0) / (t1 - t0) * (W - L - R), Y = v => H - B - (v - lo) / (hi - lo) * (H - T - B);
+  g.font = "12px Segoe UI, sans-serif"; g.strokeStyle = C.grid; g.fillStyle = C.muted; g.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) { const v = lo + (hi - lo) * i / 4, y = Y(v); g.beginPath(); g.moveTo(L, y); g.lineTo(W - R, y); g.stroke(); g.fillText(v.toFixed(2), 4, y + 4); }
+  for (let day = Math.ceil(t0 / 864e5) * 864e5; day < t1; day += 864e5) { const x = X(day); g.beginPath(); g.moveTo(x, T); g.lineTo(x, H - B); g.stroke(); g.fillText(new Date(day).toISOString().slice(5, 10), x - 14, H - 6); }
+  for (const a of d.alarms) { const x0 = X(Date.parse(a.t_first_breach)), x1 = X(a.t_clear ? Date.parse(a.t_clear) : t1); g.fillStyle = "rgba(248,113,113,0.22)"; g.fillRect(x0, T, Math.max(2, x1 - x0), H - T - B); }
+  for (const [k, v, c] of lines) { g.strokeStyle = c; g.setLineDash([6, 4]); g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(W - R, Y(v)); g.stroke(); g.setLineDash([]); g.fillStyle = c; g.fillText(k, L + 6, Y(v) - 4); }
+  g.strokeStyle = C.accent; g.lineWidth = 1.6; g.beginPath(); let pen = false;
+  d.q.forEach((v, i) => { if (v === null) { pen = false; return; } const x = X(ts[i]), y = Y(v); pen ? g.lineTo(x, y) : g.moveTo(x, y); pen = true; });
+  g.stroke();
+  g.fillStyle = C.grey; d.bad.forEach((b, i) => { if (b && d.q[i] !== null) g.fillRect(X(ts[i]) - 1, Y(d.q[i]) - 1, 3, 3); });
+}
+
+function table(alarms) {
+  const tb = document.querySelector("#alarms tbody"); tb.innerHTML = "";
+  for (const a of alarms) {
+    const tr = document.createElement("tr");
+    const can = a.state === "active_unack" || a.state === "cleared_unack";
+    tr.innerHTML = `<td>${a.id}</td><td>${a.rule}</td><td>${a.severity}</td><td>${a.t_raised.slice(0, 16).replace("T", " ")}</td><td>${a.peak == null ? "" : a.peak.toFixed(2)}</td><td class="st-${a.state}">${a.state}</td><td>${can ? `<button data-id="${a.id}">Ack</button>` : (a.ack_by || "")}</td>`;
+    tb.appendChild(tr);
+  }
+  for (const b of tb.querySelectorAll("button")) b.onclick = async () => {
+    await j(`/api/alarms/${b.dataset.id}/ack`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ by: "dashboard-operator" }) });
+    await loadStations(); select(cur);
+  };
+}
+loadStations();
+</script>
+</body>
+</html>

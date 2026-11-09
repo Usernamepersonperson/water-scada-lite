@@ -74,7 +74,7 @@ flowchart LR
 
 ## Data sources
 
-- Hydrological station data (water level, discharge, official flood-danger discharge levels): FOEN/BAFU (Swiss Federal Office for the Environment), https://www.hydrodaten.admin.ch. Source: FOEN/BAFU. Use is subject to the FOEN terms for hydrological data.
+- Hydrological station data (water level, discharge, official flood-danger discharge levels): FOEN/BAFU (Swiss Federal Office for the Environment), https://www.hydrodaten.admin.ch. Source: FOEN/BAFU. Terms: FOEN general conditions for current hydrological raw data (16.09.2019): commercial and non-commercial use allowed, source citation recommended, data are provisional and unchecked. The cached week in `fixtures/` is redistributed under these terms.
 - Endpoint used: the per-station chart document `https://www.hydrodaten.admin.ch/plots/p_q_7days/<station>_p_q_7days_de.json` (the data behind the portal's 7-day level/discharge chart). This is a portal endpoint, not a documented, versioned API, so it can change; the parser is tested against the cached snapshot in `fixtures/`. The same office also publishes hydrological data as linked data on the LINDAS SPARQL endpoint (`https://lindas.admin.ch/query`, graph `https://lindas.admin.ch/foen/hydro`); that endpoint answered a small query when checked, but it is not used by this repo.
 - Only the last 7 days are available from this endpoint, so every measured period here is one week.
 
